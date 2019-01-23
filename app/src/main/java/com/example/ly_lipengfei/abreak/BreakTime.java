@@ -62,7 +62,7 @@ public class BreakTime extends View {
     //刻度字符串
     private final String[] TIME_DEGREE = {"onCreate", "onStart", "onResume", "onPause", "onStop", "onDestroy"};
 
-
+    private BreakTimeListener mBreakTimeListener;
 
     private static final String TAG = "BreakTime";
 
@@ -204,6 +204,7 @@ public class BreakTime extends View {
     private final int[] ARGB_LEVEL2 = {230, 0, 255, 127};
     private final int[] ARGB_LEVEL3 = {230, 255, 165, 0};
     private final int[] ARGB_LEVEL4 = {230, 255, 0, 0};
+
     private void setMinPaintColor(double minAngle) {
         if (minAngle < ANGLE_LEVEL[0]) {
             //第一层级不渐变
@@ -226,7 +227,7 @@ public class BreakTime extends View {
                     ARGB_LEVEL2[1] + (int) (b * (ARGB_LEVEL3[1] - ARGB_LEVEL2[1])),
                     ARGB_LEVEL2[2] + (int) (b * (ARGB_LEVEL3[2] - ARGB_LEVEL2[2])),
                     ARGB_LEVEL2[3] + (int) (b * (ARGB_LEVEL3[3] - ARGB_LEVEL2[3])));
-        }else if(minAngle < ANGLE_LEVEL[3]){
+        } else if (minAngle < ANGLE_LEVEL[3]) {
 
             double b = (minAngle - ANGLE_LEVEL[2]) / (ANGLE_LEVEL[3] - ANGLE_LEVEL[2]);
 
@@ -234,7 +235,7 @@ public class BreakTime extends View {
                     ARGB_LEVEL3[1] + (int) (b * (ARGB_LEVEL4[1] - ARGB_LEVEL3[1])),
                     ARGB_LEVEL3[2] + (int) (b * (ARGB_LEVEL4[2] - ARGB_LEVEL3[2])),
                     ARGB_LEVEL3[3] + (int) (b * (ARGB_LEVEL4[3] - ARGB_LEVEL3[3])));
-        }else {
+        } else {
             mMinPaint.setARGB(ARGB_LEVEL4[0], ARGB_LEVEL4[1], ARGB_LEVEL4[2], ARGB_LEVEL4[3]);
         }
 
@@ -248,6 +249,7 @@ public class BreakTime extends View {
             tips = CONTINUE_TIPS;
             startTime = 0;
             stopUpdateTime();
+            mBreakTimeListener.breakTime(duration);
         } else {
             isRunning = true;
             tips = BREAK_TIPS;
@@ -291,4 +293,13 @@ public class BreakTime extends View {
         return (min < 10 ? "0" + min : min + "") + ":" + (sec < 10 ? "0" + sec : sec + "");
     }
 
+
+    //外部设置监听
+    public void setBreakTimeListener(BreakTimeListener breakTimeListener) {
+        mBreakTimeListener = breakTimeListener;
+    }
+
+    public interface BreakTimeListener {
+        void breakTime(long time);
+    }
 }
