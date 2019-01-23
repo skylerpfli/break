@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="break_time_size">1000px</dimen>
+    <dimen name="break_time_Margin">200px</dimen>
+
+</resources>

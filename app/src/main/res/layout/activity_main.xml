@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+    <com.example.ly_lipengfei.abreak.BreakTime
+        android:id="@+id/break_time_view"
+        android:layout_width="@dimen/break_time_size"
+        android:layout_height="@dimen/break_time_size"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/break_time_Margin"/>
+
+</RelativeLayout>
