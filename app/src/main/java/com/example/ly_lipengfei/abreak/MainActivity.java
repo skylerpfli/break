@@ -3,7 +3,6 @@ package com.example.ly_lipengfei.abreak;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -76,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
                             mTimeTv.setText(String.format("%.1f", newTimeHour));
                         }
                     });
-
                 }
             }
         });

@@ -152,25 +152,29 @@ public class BreakTime extends View {
         //绘制表框
         canvas.drawCircle(centerX, centerY, radius, mCirclePaint);
 
-        //绘制刻度
+        //---开始绘制刻度
         RectF RectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
-
+        //绘制onDestroy/onCreate
         Path onCreateDestroyPath = new Path();
         onCreateDestroyPath.addArc(RectF, 241, 80);
         canvas.drawTextOnPath(TIME_DEGREE[5] + " / " + TIME_DEGREE[0], onCreateDestroyPath, 0, 38, mTextPaint);
 
+        //绘制onStart
         Path onStartPath = new Path();
         onStartPath.addArc(RectF, 42, -25);
         canvas.drawTextOnPath(TIME_DEGREE[1], onStartPath, 0, -18, mTextPaint);
 
+        //绘制onResume
         Path onSumePath = new Path();
         onSumePath.addArc(RectF, 104, -25);
         canvas.drawTextOnPath(TIME_DEGREE[2], onSumePath, 0, -18, mTextPaint);
 
+        //绘制onPause
         Path onPausePath = new Path();
         onPausePath.addArc(RectF, 161, -25);
         canvas.drawTextOnPath(TIME_DEGREE[3], onPausePath, 0, -18, mTextPaint);
 
+        //绘制onPause
         Path onStopPath = new Path();
         onStopPath.addArc(RectF, 200, 25);
         canvas.drawTextOnPath(TIME_DEGREE[4], onStopPath, 0, 38, mTextPaint);
@@ -180,7 +184,7 @@ public class BreakTime extends View {
         mTimePaint.getTextBounds(time, 0, time.length(), timeBound);
         canvas.drawText(time, (float) centerX - timeBound.width() / 2, (float) centerY, mTimePaint);
 
-        //绘制tips文字
+        //绘制tips文字:continue | break
         Rect tipsBound = new Rect();
         mTipsPaint.getTextBounds(tips, 0, tips.length(), tipsBound);
         canvas.drawText(tips, (float) centerX - tipsBound.width() / 2, (float) mViewHeight * 3 / 5 + tipsBound.height() / 2, mTipsPaint);
@@ -188,6 +192,7 @@ public class BreakTime extends View {
         //绘制分
         double minAngle = ((double) duration / 3600000) * 360;
         setMinPaintColor(minAngle);
+        //角度转弧度公式为：1弧度 = 180/π = 57.3度
         canvas.drawCircle((float) (sin(minAngle / 57.3) * radius) + centerX, -(float) (cos(minAngle / 57.3) * radius) + centerY, 15, mMinPaint);
 
         //绘制秒
@@ -210,31 +215,33 @@ public class BreakTime extends View {
             mMinPaint.setARGB(ARGB_LEVEL1[0], ARGB_LEVEL1[1], ARGB_LEVEL1[2], ARGB_LEVEL1[3]);
 
         } else if (minAngle < ANGLE_LEVEL[1]) {
+            //时针在120~240度时，从蓝到绿色渐变
+
             //渐变比率
             double b = (minAngle - ANGLE_LEVEL[0]) / (ANGLE_LEVEL[1] - ANGLE_LEVEL[0]);
-
             //根据比率设置颜色数值
             mMinPaint.setARGB(ARGB_LEVEL1[0] + (int) (b * (ARGB_LEVEL2[0] - ARGB_LEVEL1[0])),
                     ARGB_LEVEL1[1] + (int) (b * (ARGB_LEVEL2[1] - ARGB_LEVEL1[1])),
                     ARGB_LEVEL1[2] + (int) (b * (ARGB_LEVEL2[2] - ARGB_LEVEL1[2])),
                     ARGB_LEVEL1[3] + (int) (b * (ARGB_LEVEL2[3] - ARGB_LEVEL1[3])));
         } else if (minAngle < ANGLE_LEVEL[2]) {
+            //时针在240~300度时，从绿到橙色渐变
 
             double b = (minAngle - ANGLE_LEVEL[1]) / (ANGLE_LEVEL[2] - ANGLE_LEVEL[1]);
-
             mMinPaint.setARGB(ARGB_LEVEL2[0] + (int) (b * (ARGB_LEVEL3[0] - ARGB_LEVEL2[0])),
                     ARGB_LEVEL2[1] + (int) (b * (ARGB_LEVEL3[1] - ARGB_LEVEL2[1])),
                     ARGB_LEVEL2[2] + (int) (b * (ARGB_LEVEL3[2] - ARGB_LEVEL2[2])),
                     ARGB_LEVEL2[3] + (int) (b * (ARGB_LEVEL3[3] - ARGB_LEVEL2[3])));
         } else if (minAngle < ANGLE_LEVEL[3]) {
+            //时针在300~360度，从橙色到红色渐变
 
             double b = (minAngle - ANGLE_LEVEL[2]) / (ANGLE_LEVEL[3] - ANGLE_LEVEL[2]);
-
             mMinPaint.setARGB(ARGB_LEVEL3[0] + (int) (b * (ARGB_LEVEL4[0] - ARGB_LEVEL3[0])),
                     ARGB_LEVEL3[1] + (int) (b * (ARGB_LEVEL4[1] - ARGB_LEVEL3[1])),
                     ARGB_LEVEL3[2] + (int) (b * (ARGB_LEVEL4[2] - ARGB_LEVEL3[2])),
                     ARGB_LEVEL3[3] + (int) (b * (ARGB_LEVEL4[3] - ARGB_LEVEL3[3])));
         } else {
+            //此后设置为红色
             mMinPaint.setARGB(ARGB_LEVEL4[0], ARGB_LEVEL4[1], ARGB_LEVEL4[2], ARGB_LEVEL4[3]);
         }
 
