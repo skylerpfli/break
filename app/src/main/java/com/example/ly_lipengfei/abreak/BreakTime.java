@@ -62,6 +62,15 @@ public class BreakTime extends View {
     //刻度字符串
     private final String[] TIME_DEGREE = {"onCreate", "onStart", "onResume", "onPause", "onStop", "onDestroy"};
 
+    //绘制表盘的路径和矩阵
+    Path onCreateDestroyPath;
+    Path onStartPath;
+    Path onSumePath;
+    Path onPausePath;
+    Path onStopPath;
+    Rect timeBound;
+    Rect tipsBound;
+
     private BreakTimeListener mBreakTimeListener;
 
     private static final String TAG = "BreakTime";
@@ -133,6 +142,38 @@ public class BreakTime extends View {
         mSecPaint.setColor(Color.RED);
     }
 
+    //初始化绘制路径
+    private void initPath() {
+        RectF RectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
+        //onCreate/Destroy的路径
+        onCreateDestroyPath = new Path();
+        onCreateDestroyPath.addArc(RectF, 241, 80);
+
+        //onStartPath的路径
+        onStartPath = new Path();
+        onStartPath.addArc(RectF, 42, -25);
+
+        //onResume的路径
+        onSumePath = new Path();
+        onSumePath.addArc(RectF, 104, -25);
+
+        //onPause的路径
+        onPausePath = new Path();
+        onPausePath.addArc(RectF, 161, -25);
+
+        //onStop的路径
+        onStopPath = new Path();
+        onStopPath.addArc(RectF, 200, 25);
+
+        //时间的绘制矩阵
+        timeBound = new Rect();
+        mTimePaint.getTextBounds(time, 0, time.length(), timeBound);
+
+        //break|continue的绘制矩阵
+        tipsBound = new Rect();
+        mTipsPaint.getTextBounds(tips, 0, tips.length(), tipsBound);
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -153,40 +194,25 @@ public class BreakTime extends View {
         canvas.drawCircle(centerX, centerY, radius, mCirclePaint);
 
         //---开始绘制刻度
-        RectF RectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
         //绘制onDestroy/onCreate
-        Path onCreateDestroyPath = new Path();
-        onCreateDestroyPath.addArc(RectF, 241, 80);
         canvas.drawTextOnPath(TIME_DEGREE[5] + " / " + TIME_DEGREE[0], onCreateDestroyPath, 0, 38, mTextPaint);
 
         //绘制onStart
-        Path onStartPath = new Path();
-        onStartPath.addArc(RectF, 42, -25);
         canvas.drawTextOnPath(TIME_DEGREE[1], onStartPath, 0, -18, mTextPaint);
 
         //绘制onResume
-        Path onSumePath = new Path();
-        onSumePath.addArc(RectF, 104, -25);
         canvas.drawTextOnPath(TIME_DEGREE[2], onSumePath, 0, -18, mTextPaint);
 
         //绘制onPause
-        Path onPausePath = new Path();
-        onPausePath.addArc(RectF, 161, -25);
         canvas.drawTextOnPath(TIME_DEGREE[3], onPausePath, 0, -18, mTextPaint);
 
         //绘制onPause
-        Path onStopPath = new Path();
-        onStopPath.addArc(RectF, 200, 25);
         canvas.drawTextOnPath(TIME_DEGREE[4], onStopPath, 0, 38, mTextPaint);
 
         //绘制时间
-        Rect timeBound = new Rect();
-        mTimePaint.getTextBounds(time, 0, time.length(), timeBound);
         canvas.drawText(time, (float) centerX - timeBound.width() / 2, (float) centerY, mTimePaint);
 
         //绘制tips文字:continue | break
-        Rect tipsBound = new Rect();
-        mTipsPaint.getTextBounds(tips, 0, tips.length(), tipsBound);
         canvas.drawText(tips, (float) centerX - tipsBound.width() / 2, (float) mViewHeight * 3 / 5 + tipsBound.height() / 2, mTipsPaint);
 
         //绘制分
@@ -289,12 +315,6 @@ public class BreakTime extends View {
         mMusicHandler.removeMessages(TIME_MESSAGE);
     }
 
-    private String duration2Time(long duration) {
-        long min = duration / 1000 / 60;
-        long sec = duration / 1000 % 60;
-        return (min < 10 ? "0" + min : min + "") + ":" + (sec < 10 ? "0" + sec : sec + "");
-    }
-
     //重置
     public void reset() {
         //恢复初始
@@ -305,6 +325,13 @@ public class BreakTime extends View {
         mBreakTimeListener.breakTime(duration);
     }
 
+    //把时间数值转化为可显示的文字
+    private String duration2Time(long duration) {
+        long min = duration / 1000 / 60;
+        long sec = duration / 1000 % 60;
+        return (min < 10 ? "0" + min : min + "") + ":" + (sec < 10 ? "0" + sec : sec + "");
+    }
+    
     //外部设置监听
     public void setBreakTimeListener(BreakTimeListener breakTimeListener) {
         mBreakTimeListener = breakTimeListener;
