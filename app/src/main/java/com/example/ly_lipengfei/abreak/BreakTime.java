@@ -27,14 +27,14 @@ import static java.lang.Math.sin;
 public class BreakTime extends View {
 
     //绘制相关
-    Paint mCirclePaint;
-    Paint mTimePaint;
-    Paint mTipsPaint;
-    Paint mTextPaint;
-    Paint mMinPaint;
-    Paint mSecPaint;
-    int mViewWidth;
-    int mViewHeight;
+    private Paint mCirclePaint;
+    private Paint mTimePaint;
+    private Paint mTipsPaint;
+    private Paint mTextPaint;
+    private Paint mMinPaint;
+    private Paint mSecPaint;
+    private int mViewWidth;
+    private int mViewHeight;
 
     //时钟半径、中心点
     int radius;
@@ -90,6 +90,15 @@ public class BreakTime extends View {
         initPaint();
     }
 
+    //初始化数据
+    private void initConfig() {
+        tips = CONTINUE_TIPS;
+        isRunning = false;
+        startTime = 0;
+        duration = 0;
+        time = NO_INIT_TIME_STR;
+    }
+
     //初始化画笔
     private void initPaint() {
         //绘制圆形的画笔
@@ -122,16 +131,6 @@ public class BreakTime extends View {
         //绘制秒的画笔
         mSecPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSecPaint.setColor(Color.RED);
-
-    }
-
-    //初始化数据
-    private void initConfig() {
-        tips = CONTINUE_TIPS;
-        isRunning = false;
-        startTime = 0;
-        duration = 0;
-        time = NO_INIT_TIME_STR;
     }
 
     @Override
@@ -245,11 +244,7 @@ public class BreakTime extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (isRunning) {
             //恢复初始
-            isRunning = false;
-            tips = CONTINUE_TIPS;
-            startTime = 0;
-            stopUpdateTime();
-            mBreakTimeListener.breakTime(duration);
+            reset();
         } else {
             isRunning = true;
             tips = BREAK_TIPS;
@@ -293,6 +288,15 @@ public class BreakTime extends View {
         return (min < 10 ? "0" + min : min + "") + ":" + (sec < 10 ? "0" + sec : sec + "");
     }
 
+    //重置
+    public void reset() {
+        //恢复初始
+        isRunning = false;
+        tips = CONTINUE_TIPS;
+        startTime = 0;
+        stopUpdateTime();
+        mBreakTimeListener.breakTime(duration);
+    }
 
     //外部设置监听
     public void setBreakTimeListener(BreakTimeListener breakTimeListener) {
