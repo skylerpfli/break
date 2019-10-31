@@ -79,24 +79,28 @@ public class BreakTime extends View {
         super(context);
         initConfig();
         initPaint();
+        initPath();
     }
 
     public BreakTime(Context context, AttributeSet attrs) {
         super(context, attrs);
         initConfig();
         initPaint();
+        initPath();
     }
 
     public BreakTime(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initConfig();
         initPaint();
+        initPath();
     }
 
     public BreakTime(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initConfig();
         initPaint();
+        initPath();
     }
 
     //初始化数据
@@ -145,6 +149,7 @@ public class BreakTime extends View {
     //初始化绘制路径
     private void initPath() {
         RectF RectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
+
         //onCreate/Destroy的路径
         onCreateDestroyPath = new Path();
         onCreateDestroyPath.addArc(RectF, 241, 80);
@@ -171,7 +176,6 @@ public class BreakTime extends View {
 
         //break|continue的绘制矩阵
         tipsBound = new Rect();
-        mTipsPaint.getTextBounds(tips, 0, tips.length(), tipsBound);
     }
 
     @Override
@@ -213,9 +217,11 @@ public class BreakTime extends View {
         canvas.drawText(time, (float) centerX - timeBound.width() / 2, (float) centerY, mTimePaint);
 
         //绘制tips文字:continue | break
+        mTipsPaint.getTextBounds(tips, 0, tips.length(), tipsBound);
         canvas.drawText(tips, (float) centerX - tipsBound.width() / 2, (float) mViewHeight * 3 / 5 + tipsBound.height() / 2, mTipsPaint);
 
         //绘制分
+        //计算分的角度
         double minAngle = ((double) duration / 3600000) * 360;
         setMinPaintColor(minAngle);
         //角度转弧度公式为：1弧度 = 180/π = 57.3度
@@ -235,6 +241,7 @@ public class BreakTime extends View {
     private final int[] ARGB_LEVEL3 = {230, 255, 165, 0};
     private final int[] ARGB_LEVEL4 = {230, 255, 0, 0};
 
+    //设置分钟画笔的颜色，在不同位置有不同颜色，渐变
     private void setMinPaintColor(double minAngle) {
         if (minAngle < ANGLE_LEVEL[0]) {
             //第一层级不渐变
@@ -270,7 +277,6 @@ public class BreakTime extends View {
             //此后设置为红色
             mMinPaint.setARGB(ARGB_LEVEL4[0], ARGB_LEVEL4[1], ARGB_LEVEL4[2], ARGB_LEVEL4[3]);
         }
-
     }
 
     @Override
@@ -331,7 +337,7 @@ public class BreakTime extends View {
         long sec = duration / 1000 % 60;
         return (min < 10 ? "0" + min : min + "") + ":" + (sec < 10 ? "0" + sec : sec + "");
     }
-    
+
     //外部设置监听
     public void setBreakTimeListener(BreakTimeListener breakTimeListener) {
         mBreakTimeListener = breakTimeListener;
