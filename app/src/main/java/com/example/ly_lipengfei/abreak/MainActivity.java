@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //退出界面时重置
         mBreakTimeView.reset();
     }
 }

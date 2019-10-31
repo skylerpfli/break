@@ -79,28 +79,24 @@ public class BreakTime extends View {
         super(context);
         initConfig();
         initPaint();
-        initPath();
     }
 
     public BreakTime(Context context, AttributeSet attrs) {
         super(context, attrs);
         initConfig();
         initPaint();
-        initPath();
     }
 
     public BreakTime(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initConfig();
         initPaint();
-        initPath();
     }
 
     public BreakTime(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initConfig();
         initPaint();
-        initPath();
     }
 
     //初始化数据
@@ -188,6 +184,7 @@ public class BreakTime extends View {
         radius = mViewWidth * 2 / 5;
         centerX = mViewWidth / 2;
         centerY = mViewHeight / 2;
+        initPath();
     }
 
     @Override
@@ -289,8 +286,12 @@ public class BreakTime extends View {
             tips = BREAK_TIPS;
             startTime = System.currentTimeMillis();
             duration = 0;
+
+            //开始计时
             startUpdateTime();
         }
+
+        //让控件重新绘制
         invalidate();
 
         return super.onTouchEvent(event);
