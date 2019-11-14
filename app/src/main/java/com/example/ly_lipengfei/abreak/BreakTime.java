@@ -310,14 +310,14 @@ public class BreakTime extends View {
         }
     };
 
-    //启动更新进度条
+    //启动更新
     private void startUpdateTime() {
         /*避免重复发送Message*/
         stopUpdateTime();
         mMusicHandler.sendEmptyMessageDelayed(TIME_MESSAGE, REFRESH_DELAY_TIME);
     }
 
-    //暂停进度条
+    //暂停
     private void stopUpdateTime() {
         mMusicHandler.removeMessages(TIME_MESSAGE);
     }
