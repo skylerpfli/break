@@ -6,4 +6,4 @@
 * 右下角记录有效时长和次数，每天刷新
 * 退出手机屏幕会打断哦
 
-![break](https://github.com/irdest/pic/blob/master/Break/break.jpg)
+![break](https://github.com/irdest/pic/blob/master/Break/break.gif)
