@@ -8,4 +8,4 @@
 
 相关博文：[CSDN_程序时钟：Break！](https://blog.csdn.net/weixin_42229694/article/details/103071732)
 
-![break](https://github.com/irdest/pic/blob/master/Break/break.gif)
+![break](https://github.com/irdest/break/blob/master/picShow.gif)
